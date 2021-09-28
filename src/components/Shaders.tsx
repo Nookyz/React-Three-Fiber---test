@@ -43,7 +43,7 @@ export const fragmentShader = `
 `;
 
 const Shaders: React.FC = () => {
-  const ref = useRef<any>();
+  const shaderRef = useRef<THREE.ShaderMaterial>(null!);
 
   const uniforms = useMemo(
     () => ({
@@ -64,7 +64,7 @@ const Shaders: React.FC = () => {
     <mesh>
       <planeBufferGeometry attach="geometry" args={[5, 5, 32, 32]} />
       <shaderMaterial
-        ref={ref}
+        ref={shaderRef}
         attach="material"
         uniforms={uniforms}
         vertexShader={vertexShader}
