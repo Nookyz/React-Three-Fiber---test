@@ -32,6 +32,7 @@ const Fade = () => {
         tex={texture1}
         tex2={texture2}
         disp={dispTexture}
+        effectFactor={-0.2}
         side={THREE.DoubleSide}
       />
     </mesh>
