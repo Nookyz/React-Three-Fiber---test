@@ -10,6 +10,9 @@ import { config } from 'dotenv';
 
 config();
 
+// @babel/runtime
+// @babel/runtime-corejs3
+
 const { NODE_ENV, PORT } = process.env;
 const outDir = path.resolve('build');
 const isProd = NODE_ENV === 'production';

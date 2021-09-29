@@ -42,6 +42,8 @@ export const fragmentShader = `
   }
 `;
 
+const shader = { vertexShader, fragmentShader };
+
 const Shaders: React.FC = () => {
   const shaderRef = useRef<THREE.ShaderMaterial>(null!);
 
@@ -66,9 +68,10 @@ const Shaders: React.FC = () => {
       <shaderMaterial
         ref={shaderRef}
         attach="material"
+        args={[shader]}
         uniforms={uniforms}
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
+        // vertexShader={vertexShader}
+        // fragmentShader={fragmentShader}
         side={THREE.DoubleSide}
       />
     </mesh>
