@@ -1,4 +1,3 @@
-/* eslint-disable no-return-assign */
 import * as THREE from 'three';
 import { extend } from '@react-three/fiber';
 
@@ -24,8 +23,8 @@ export default class ImageFadeMaterial extends THREE.ShaderMaterial {
           vUv = uv;
           vec3 newPosition=position;
           newPosition.z+=.1*sin((newPosition.x+uTime)*2.*PI);
-          gl_Position=projectionMatrix*modelViewMatrix*vec4(newPosition,1.);
-          // gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+          // gl_Position=projectionMatrix*modelViewMatrix*vec4(newPosition,1.);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
         }
       `,
       fragmentShader: `

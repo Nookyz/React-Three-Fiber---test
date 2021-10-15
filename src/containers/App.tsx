@@ -9,9 +9,14 @@ import { OrbitControls } from '@react-three/drei';
 
 import store from '@/store';
 
+import Scene from '@components/Scene';
+
 // import Shaders from '@components/Shaders';
 // import Model from '@components/Model';
 import Fade from '@components/Fade';
+import Test from '@components/Test';
+import Example from '@containers/Example';
+import SecondExample from '@containers/SecondExample';
 
 const GlobalStyle = createGlobalStyle`
   ${normalize};
@@ -35,7 +40,6 @@ const GlobalStyle = createGlobalStyle`
     user-select: none;
     overflow: hidden;
   }
-
 `;
 
 const App: React.FC = () => (
@@ -43,17 +47,7 @@ const App: React.FC = () => (
     <Provider store={store}>
       <GlobalStyle />
       <Suspense fallback={<div>loading...</div>}>
-        <Canvas
-          camera={{ position: [0, 0, 10], fov: 45 }}
-        >
-          <Fade />
-          <OrbitControls
-            enablePan={false}
-            zoomSpeed={1}
-            minDistance={8}
-            maxDistance={20}
-          />
-        </Canvas>
+        <Example />
       </Suspense>
     </Provider>
   </BrowserRouter>
