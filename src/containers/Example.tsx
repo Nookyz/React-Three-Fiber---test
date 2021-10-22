@@ -47,7 +47,7 @@ const View = styled.div`
 `;
 
 const Container = styled.div`
-  width: 1400px;
+  width: 80%;
   height: 100%;
   margin: 0 auto;
   display: flex;
@@ -56,7 +56,7 @@ const Container = styled.div`
 `;
 
 const BoxImage = styled.div`
-  width: 500px;
+  width: 40%;
   height: 700px;
   position: relative;
 `;
