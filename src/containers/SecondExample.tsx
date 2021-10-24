@@ -1,52 +1,34 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Scene from '@components/Scene';
-
-import Fade from '@components/Fade';
+import Sphere from '@components/Sphere';
+import { OrbitControls } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 
 const Example: React.FC = () => (
   <View>
     <Container>
-      <BoxImage>
-        <Scene>
-          <Fade
-            images={[
-              '/assets/img3.jpg',
-              '/assets/img4.jpg',
-              '/assets/displacement/disp8.jpg',
-            ]}
-            effectFactor={-0.65}
-          />
-        </Scene>
-      </BoxImage>
+      <Canvas>
+        <Sphere />
+        <OrbitControls />
+      </Canvas>
     </Container>
   </View>
 );
 
 const View = styled.div`
-  height: 100vh;
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-
-  background: #181818;
-`;
-
-const Container = styled.div`
   height: 100%;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  background: #111518;
 `;
 
-const BoxImage = styled.div`
-  width: 30vw;
-  min-width: 400px;
-  height: 60vh;
-  position: relative;
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
 `;
 
 export default Example;

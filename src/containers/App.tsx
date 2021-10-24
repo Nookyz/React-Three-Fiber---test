@@ -47,7 +47,7 @@ const App: React.FC = () => (
     <Provider store={store}>
       <GlobalStyle />
       <Suspense fallback={<div>loading...</div>}>
-        <Example />
+        <SecondExample />
       </Suspense>
     </Provider>
   </BrowserRouter>
