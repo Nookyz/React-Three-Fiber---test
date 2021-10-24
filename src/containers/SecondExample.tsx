@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-
-import Sphere from '@components/Sphere';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+
+import Sphere from '@components/Sphere';
+import Lights from '@components/Lights';
 
 const Example: React.FC = () => (
   <View>
     <Container>
       <Canvas>
+        <Lights />
         <Sphere />
         <OrbitControls />
       </Canvas>

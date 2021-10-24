@@ -1,26 +1,10 @@
-export const permute = `
-  vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
-`;
-
-export const taylorInvSqrt = `
-  vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
-`;
-
-export const fadeVec4 = `
-  vec4 fadeVec4(vec4 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
-`;
-
-export const fadeVec3 = `
-  vec3 fadeVec3(vec3 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
-`;
-
 export const perlin4d = `
   //Classic Perlin 3D Noise 
   //by Stefan Gustavson
 
-  ${fadeVec4}
-
-  vec4 fade(vec4 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
+  vec4 perlin4dTaylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
+  vec4 fadeVec4(vec4 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
+  vec4 perlin4dPermute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 
   float perlin4d(vec4 P){
     vec4 Pi0 = floor(P); // Integer part for indexing
@@ -36,13 +20,13 @@ export const perlin4d = `
     vec4 iw0 = vec4(Pi0.wwww);
     vec4 iw1 = vec4(Pi1.wwww);
 
-    vec4 ixy = permute(permute(ix) + iy);
-    vec4 ixy0 = permute(ixy + iz0);
-    vec4 ixy1 = permute(ixy + iz1);
-    vec4 ixy00 = permute(ixy0 + iw0);
-    vec4 ixy01 = permute(ixy0 + iw1);
-    vec4 ixy10 = permute(ixy1 + iw0);
-    vec4 ixy11 = permute(ixy1 + iw1);
+    vec4 ixy = perlin4dPermute(perlin4dPermute(ix) + iy);
+    vec4 ixy0 = perlin4dPermute(ixy + iz0);
+    vec4 ixy1 = perlin4dPermute(ixy + iz1);
+    vec4 ixy00 = perlin4dPermute(ixy0 + iw0);
+    vec4 ixy01 = perlin4dPermute(ixy0 + iw1);
+    vec4 ixy10 = perlin4dPermute(ixy1 + iw0);
+    vec4 ixy11 = perlin4dPermute(ixy1 + iw1);
 
     vec4 gx00 = ixy00 / 7.0;
     vec4 gy00 = floor(gx00) / 7.0;
@@ -105,25 +89,25 @@ export const perlin4d = `
     vec4 g0111 = vec4(gx11.z,gy11.z,gz11.z,gw11.z);
     vec4 g1111 = vec4(gx11.w,gy11.w,gz11.w,gw11.w);
 
-    vec4 norm00 = taylorInvSqrt(vec4(dot(g0000, g0000), dot(g0100, g0100), dot(g1000, g1000), dot(g1100, g1100)));
+    vec4 norm00 = perlin4dTaylorInvSqrt(vec4(dot(g0000, g0000), dot(g0100, g0100), dot(g1000, g1000), dot(g1100, g1100)));
     g0000 *= norm00.x;
     g0100 *= norm00.y;
     g1000 *= norm00.z;
     g1100 *= norm00.w;
 
-    vec4 norm01 = taylorInvSqrt(vec4(dot(g0001, g0001), dot(g0101, g0101), dot(g1001, g1001), dot(g1101, g1101)));
+    vec4 norm01 = perlin4dTaylorInvSqrt(vec4(dot(g0001, g0001), dot(g0101, g0101), dot(g1001, g1001), dot(g1101, g1101)));
     g0001 *= norm01.x;
     g0101 *= norm01.y;
     g1001 *= norm01.z;
     g1101 *= norm01.w;
 
-    vec4 norm10 = taylorInvSqrt(vec4(dot(g0010, g0010), dot(g0110, g0110), dot(g1010, g1010), dot(g1110, g1110)));
+    vec4 norm10 = perlin4dTaylorInvSqrt(vec4(dot(g0010, g0010), dot(g0110, g0110), dot(g1010, g1010), dot(g1110, g1110)));
     g0010 *= norm10.x;
     g0110 *= norm10.y;
     g1010 *= norm10.z;
     g1110 *= norm10.w;
 
-    vec4 norm11 = taylorInvSqrt(vec4(dot(g0011, g0011), dot(g0111, g0111), dot(g1011, g1011), dot(g1111, g1111)));
+    vec4 norm11 = perlin4dTaylorInvSqrt(vec4(dot(g0011, g0011), dot(g0111, g0111), dot(g1011, g1011), dot(g1111, g1111)));
     g0011 *= norm11.x;
     g0111 *= norm11.y;
     g1011 *= norm11.z;
@@ -160,7 +144,9 @@ export const perlin3d = `
   //Classic Perlin 3D Noise 
   //by Stefan Gustavson
 
-  ${fadeVec3}
+  vec3 fadeVec3(vec3 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
+  vec4 perlin3dTaylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
+  vec4 perlin3dPermute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 
   float perlin3d(vec3 P)
   {
@@ -175,9 +161,9 @@ export const perlin3d = `
     vec4 iz0 = Pi0.zzzz;
     vec4 iz1 = Pi1.zzzz;
 
-    vec4 ixy = permute(permute(ix) + iy);
-    vec4 ixy0 = permute(ixy + iz0);
-    vec4 ixy1 = permute(ixy + iz1);
+    vec4 ixy = perlin3dPermute(perlin3dPermute(ix) + iy);
+    vec4 ixy0 = perlin3dPermute(ixy + iz0);
+    vec4 ixy1 = perlin3dPermute(ixy + iz1);
 
     vec4 gx0 = ixy0 / 7.0;
     vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;
@@ -204,12 +190,12 @@ export const perlin3d = `
     vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
     vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
 
-    vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+    vec4 norm0 = perlin3dTaylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
     g000 *= norm0.x;
     g010 *= norm0.y;
     g100 *= norm0.z;
     g110 *= norm0.w;
-    vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+    vec4 norm1 = perlin3dTaylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
     g001 *= norm1.x;
     g011 *= norm1.y;
     g101 *= norm1.z;
