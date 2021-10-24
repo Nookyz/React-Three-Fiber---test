@@ -22,7 +22,7 @@ const ParticleImage: React.FC<Props> = ({
 
   const [texture1, texture2, mask] = useLoader(THREE.TextureLoader, images);
 
-  const { width, height } = useThree((state) => state.viewport);
+  const { width, height } = useThree(({ viewport }) => viewport);
 
   useFrame((state) => {
     ref.current.uniforms.uTime.value = state.clock.elapsedTime;
