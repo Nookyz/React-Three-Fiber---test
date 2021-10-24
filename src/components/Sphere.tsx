@@ -1,8 +1,10 @@
 /* eslint-disable max-len */
-import React, { useRef } from 'react';
+import React, {
+  useRef, useState, useEffect, useCallback,
+} from 'react';
 import * as THREE from 'three';
 
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useControls } from 'leva';
 
 import {
@@ -49,6 +51,8 @@ export const vertexShader = `
 
   void main() {
     // Positon
+    vec3 newPosition = vec3(position.x + 4.0, position.y, position.z);
+
     vec4 displacementPosition = getDisplacedPosition(position);
     vec4 viewPosition = viewMatrix * vec4(displacementPosition.xyz, 1.0);
     gl_Position = projectionMatrix * viewPosition;
@@ -114,9 +118,72 @@ export const uniforms = {
 
 const shaders = { vertexShader, fragmentShader };
 
+export enum SizeSphere {
+  Default = 2.2,
+  Medium = 1.8,
+  Small = 1.2,
+}
+
+export enum SizeScreen {
+  Desktop,
+  Labtop = 1280,
+  Tablet = 768,
+  Mobile = 460,
+}
+
 const Sphere: React.FC = () => {
-  const meshRef = useRef<THREE.Mesh>(null!);
   const shaderRef = useRef<THREE.ShaderMaterial>(null!);
+
+  const previus = useRef<number>(SizeSphere.Default);
+
+  const initiolCalcSizeSphere = useCallback(() => {
+    if (window.innerWidth > SizeScreen.Labtop) {
+      if (previus.current >= SizeSphere.Default) {
+        return SizeSphere.Default;
+      }
+    } else if (window.innerWidth > SizeScreen.Tablet && window.innerWidth < SizeScreen.Labtop) {
+      if (previus.current >= SizeSphere.Medium) {
+        return SizeSphere.Medium;
+      }
+    } else if (window.innerWidth > SizeScreen.Mobile && window.innerWidth < SizeScreen.Labtop) {
+      if (previus.current <= SizeSphere.Default) {
+        return SizeSphere.Small;
+      }
+    }
+    return SizeSphere.Small;
+  }, []);
+
+  const [size, setSize] = useState<number>(initiolCalcSizeSphere());
+
+  const handleCalcSizeSphere = useCallback(() => {
+    if (window.innerWidth > SizeScreen.Labtop) {
+      if (previus.current !== SizeSphere.Default) {
+        setSize(SizeSphere.Default);
+        previus.current = SizeSphere.Default;
+      }
+    } else if (window.innerWidth > SizeScreen.Tablet && window.innerWidth < SizeScreen.Labtop) {
+      if (previus.current !== SizeSphere.Medium) {
+        setSize(SizeSphere.Medium);
+        previus.current = SizeSphere.Medium;
+      }
+    } else if (window.innerWidth > SizeScreen.Mobile && window.innerWidth < SizeScreen.Labtop) {
+      if (previus.current !== SizeSphere.Small) {
+        setSize(SizeSphere.Small);
+        previus.current = SizeSphere.Small;
+      }
+    }
+  }, []);
+
+  const onResize = useCallback(() => {
+    window.addEventListener('resize', handleCalcSizeSphere);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('resize', onResize, false);
+    return () => {
+      window.removeEventListener('resize', onResize, false);
+    };
+  }, []);
 
   const {
     uTimeFrequency,
@@ -156,8 +223,6 @@ const Sphere: React.FC = () => {
   });
 
   useFrame(({ clock }) => {
-    // Mesh
-    meshRef.current.rotation.x += 0.01;
     // Shader
     shaderRef.current.uniforms.uTime.value = clock.getElapsedTime();
     shaderRef.current.uniforms.uTimeFrequency.value = uTimeFrequency;
@@ -173,9 +238,10 @@ const Sphere: React.FC = () => {
   });
 
   return (
-    <mesh ref={meshRef}>
-      <sphereBufferGeometry attach="geometry" args={[2, 512, 512]} />
-      {/* <meshBasicMaterial wireframe /> */}
+    <mesh>
+      {/* <boxGeometry args={[2, 2, 2]} />
+      <meshStandardMaterial color="#ddcb90" /> */}
+      <sphereBufferGeometry attach="geometry" args={[size, 512, 512]} />
       <shaderMaterial
         ref={shaderRef}
         attach="material"
