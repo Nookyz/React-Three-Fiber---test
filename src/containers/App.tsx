@@ -32,13 +32,13 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
     margin: 0;
     padding: 0;
-    -webkit-touch-callout: none;
+    /* -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    overflow: hidden;
+    overflow: hidden; */
   }
 
   #root {
@@ -53,7 +53,7 @@ const GlobalStyle = createGlobalStyle`
     pointer-events: none;
     user-select: none;
     background-image: url('http://momentsingraphics.de/Media/BlueNoise/WhiteNoiseDithering.png');
-    opacity: 0.02;
+    opacity: 0.03;
     animation: noise 8s steps(10) infinite;
   }
   }

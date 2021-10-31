@@ -45,8 +45,12 @@ export const vertexShader = `
     return vec4(displacedPosition, perlinStrength);
   }
 
-  float getColor(float c){
-    return cos(c + uTime) * uTime * 0.03;
+  vec3 getColor(){
+    float pct = abs(sin(uTime));
+
+    vec3 colorA = vec3(0.149,0.141,0.912);
+    vec3 colorB = vec3(1.000,0.833,0.224);
+    return mix(colorA, colorB, pct);
   }
 
   void main() {
@@ -58,17 +62,22 @@ export const vertexShader = `
     gl_Position = projectionMatrix * viewPosition;
 
     //  Color
-    vec3 uLightAColor = vec3(1.0, 0.2, 0.5);
+    vec3 uLightAColor = vec3(0.85, 0.2, 0.1);
     vec3 uLightAPosition = vec3(1.0, 1.0, 0.0);
     float lightAIntensity = max(0.0, - dot(normal, normalize(- uLightAPosition)));
 
-    vec3 uLightBColor = vec3(0.5, 0.2, 1.0);
+    vec3 uLightBColor = vec3(0.2, 0.0, 1.0); // uR, uG, uB
     vec3 uLightBPosition = vec3(-1.0, -0.5, 0.0);
     float lightBIntensity = max(0.0, - dot(normal, normalize(- uLightBPosition)));
+
+    vec3 uLightCColor = vec3(0.0, 0.7, 0.25);
+    vec3 uLightCPosition = vec3(1.0, -0.5, 0.0);
+    float lightCIntensity = max(0.0, - dot(normal, normalize(- uLightCPosition)));
 
     vec3 color = vec3(1.0);
     color = mix(color, uLightAColor, lightAIntensity);
     color = mix(color, uLightBColor, lightBIntensity);
+    color = mix(color, uLightCColor, lightCIntensity);
 
     //  Varying
     vNormal = normal;

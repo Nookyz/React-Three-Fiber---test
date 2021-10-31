@@ -19,7 +19,7 @@ const Example: React.FC = () => (
 );
 
 const View = styled.div`
-  height: 100%;
+  height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
